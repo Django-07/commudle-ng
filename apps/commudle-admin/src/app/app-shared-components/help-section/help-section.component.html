@@ -1,9 +1,5 @@
-<span
-  *ngIf="helpDictionaryData?.type === EHelpDictionaryType.URL"
-  (click)="openSidebar()"
-  [nbTooltip]="helpDictionaryData?.title || 'Help Info'"
->
-  <fa-icon [icon]="faCircleQuestion" class="text-info"></fa-icon>
+<span (click)="openSidebar()">
+  <fa-icon *ngIf="helpDictionaryData.type === EHelpDictionaryType.URL" [icon]="faCircleQuestion"></fa-icon>
   <span *ngIf="helpDictionaryData?.title">{{ helpDictionaryData.title }}</span>
 </span>
 

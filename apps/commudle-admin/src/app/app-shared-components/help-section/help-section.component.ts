@@ -34,11 +34,8 @@ export class HelpSectionComponent implements OnInit {
   }
 
   openSidebar() {
-    console.log('openSidebar triggered');
-    console.log('helpDictionaryData:', this.helpDictionaryData);
     if (this.helpDictionaryData && this.helpDictionaryData.type === EHelpDictionaryType.URL) {
-      window.open(this.helpDictionaryData.url, '_blank');
-      // this.helpDictionaryService.getHelpDictionaryIframe(this.helpDictionaryData.url);
+      this.helpDictionaryService.getHelpDictionaryIframe(this.helpDictionaryData.url);
       this.helpSidebarService.openSidebar('helpSection');
       this.gtmService(this.helpDictionaryData);
     }
@@ -46,7 +43,6 @@ export class HelpSectionComponent implements OnInit {
 
   getHelpSectionData() {
     this.helpDictionaryData = this.helpDictionary[this.helpDictionaryName];
-    console.log('helpDictionaryData:', this.helpDictionaryData);
   }
 
   gtmService(helpData) {
