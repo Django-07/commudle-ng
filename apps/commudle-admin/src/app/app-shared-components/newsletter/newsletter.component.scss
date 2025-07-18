@@ -60,12 +60,9 @@ nb-card {
   }
 }
 .newsletter-wrapper {
-  @apply com-overflow-x-auto com-max-w-full;
+  @apply com-overflow-x-auto com-w-full;
 
   @screen md {
     @apply com-overflow-x-hidden;
   }
-}
-* {
-  @apply com-box-border;
 }
