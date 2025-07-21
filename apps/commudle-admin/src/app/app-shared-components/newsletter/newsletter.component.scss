@@ -3,7 +3,7 @@
 }
 
 .newsletters > table {
-  @apply com-border-collapse com-w-full;
+  @apply com-border-collapse com-w-full md:com-overflow-x-hidden;
   tr {
     td {
       @apply com-px-4;
@@ -57,12 +57,5 @@ nb-card {
         @apply com-flex com-flex-col;
       }
     }
-  }
-}
-.newsletter-wrapper {
-  @apply com-overflow-x-auto com-w-full;
-
-  @screen md {
-    @apply com-overflow-x-hidden;
   }
 }
