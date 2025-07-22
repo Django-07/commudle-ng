@@ -61,8 +61,4 @@ nb-card {
 }
 .newsletters {
   @apply com-overflow-x-auto com-w-full;
-
-  table {
-    @apply com-min-w-[640px] com-w-full;
-  }
 }
