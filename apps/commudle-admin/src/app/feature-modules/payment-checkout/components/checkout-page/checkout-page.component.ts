@@ -27,6 +27,7 @@ import {
   GoogleTagManagerService,
   PurchaseOrderService,
   RazorpayService,
+  SeoService,
   ToastrService,
 } from '@commudle/shared-services';
 import { NbDialogRef, NbDialogService } from '@commudle/theme';
@@ -90,6 +91,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     private dialogService: NbDialogService,
     private discountCodesService: DiscountCodesService,
     private gtm: GoogleTagManagerService,
+    private seoService: SeoService,
   ) {
     this.contactInfoForm = this.initCheckoutForm();
   }
@@ -104,6 +106,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.seoService.noIndex(true);
     this.openLoadingDialog();
     this.fetchCurrentUser();
     this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
@@ -118,6 +121,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.closeLoadingDialog();
+    this.seoService.noIndex(false);
   }
 
   private fetchPurchaseOrder(purchaseOrderUuid: string): void {
@@ -135,7 +139,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
           this.quantity = this.purchaseOrder.quantity || 1;
 
           if (this.purchaseOrder.notes?.subscription_months) {
-            this.subscriptionMonths = this.purchaseOrder.notes.subscription_months;
+            this.subscriptionMonths = this.purchaseOrder.notes?.subscription_months;
           }
 
           if (this.purchaseOrder.discount_code?.code) {
@@ -328,6 +332,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
                     com_purchase_order: this.purchaseOrder.uuid,
                     com_product_price_plan_name: this.productPrice.plan_name,
                     com_product_price_product_name: this.productPrice.product_name,
+                    com_purchase_order_quantity: this.purchaseOrder.quantity,
+                    com_purchase_order_subscription_months: this.purchaseOrder.notes?.subscription_months,
                   });
                 }
                 this.toastrService.successDialog('Your Payment Was Received Successfully');
@@ -341,6 +347,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
                   com_purchase_order: this.purchaseOrder.uuid,
                   com_product_price_plan_name: this.productPrice.plan_name,
                   com_product_price_product_name: this.productPrice.product_name,
+                  com_purchase_order_quantity: this.purchaseOrder.quantity,
+                  com_purchase_order_subscription_months: this.purchaseOrder.notes?.subscription_months,
                 });
               }
               this.toastrService.errorDialog('Payment processing failed');
@@ -362,6 +370,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
               com_purchase_order: this.purchaseOrder.uuid,
               com_product_price_plan_name: this.productPrice.plan_name,
               com_product_price_product_name: this.productPrice.product_name,
+              com_purchase_order_quantity: this.purchaseOrder.quantity,
+              com_purchase_order_subscription_months: this.purchaseOrder.notes?.subscription_months,
             });
           }
           this.dialogService.open(this.paymentErrorDialog, {
@@ -387,6 +397,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
                 com_purchase_order: this.purchaseOrder.uuid,
                 com_product_price_plan_name: this.productPrice.plan_name,
                 com_product_price_product_name: this.productPrice.product_name,
+                com_purchase_order_quantity: this.purchaseOrder.quantity,
+                com_purchase_order_subscription_months: this.purchaseOrder.notes?.subscription_months,
               });
             }
             this.toastrService.errorDialog(`Payment failed: ${response.error.description}`);
@@ -398,6 +410,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
                 com_purchase_order: this.purchaseOrder.uuid,
                 com_product_price_plan_name: this.productPrice.plan_name,
                 com_product_price_product_name: this.productPrice.product_name,
+                com_purchase_order_quantity: this.purchaseOrder.quantity,
+                com_purchase_order_subscription_months: this.purchaseOrder.notes?.subscription_months,
               });
             }
             this.toastrService.errorDialog('Failed to process payment failure');
@@ -434,6 +448,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
   onProductPriceLoaded(productPrice: IProductPrice): void {
     if (!productPrice) return;
+
+    this.seoService.setTitle(`Checkout | ${productPrice.product_name} - ${productPrice.plan_name} | Commudle`);
 
     this.productPrice = productPrice;
     this.minQuantity = productPrice.min_quantity || 1;
@@ -581,7 +597,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  private gtmDataLayerPushEvent(eventName: string, eventData: Record<string, string> = {}): void {
+  private gtmDataLayerPushEvent(eventName: string, eventData: Record<string, string | number> = {}): void {
     this.gtm.dataLayerPushEvent(eventName, eventData);
   }
 }
