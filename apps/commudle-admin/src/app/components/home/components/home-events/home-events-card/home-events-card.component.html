@@ -9,11 +9,12 @@
   </div> -->
   <div class="home-events-card-image">
     <div [ngClass]="{ old: moment(event.start_time) < moment() }" class="home-events-card-image-overlay"></div>
-    <img
-      alt="{{ event.name }}"
-      src="{{ event.header_image?.i350 || community.logo_image_path.i64 }}"
-      title="{{ event.name }}"
-    />
+
+    <commudle-banner-image
+      *ngIf="event.header_image?.i350 || community.logo_image_path.i64"
+      [headerImagePath]="event.header_image?.i350 || community.logo_image_path.i64"
+      [name]="event.name"
+    ></commudle-banner-image>
   </div>
   <div *ngIf="event.start_time" [ngClass]="{ old: moment(event.start_time) < moment() }" class="home-events-card-date">
     {{ moment(event.start_time).format('MMM DD') }}
@@ -24,12 +25,13 @@
     </div>
     <div class="home-events-card-host d-flex justify-content-space-between align-items-center">
       <div class="home-events-card-community d-flex align-items-center">
-        <img
-          alt="{{ community.name }}"
+        <commudle-banner-image
+          *ngIf="community.logo_image_path?.i64"
+          [headerImagePath]="community.logo_image_path.i64"
+          [name]="community.name"
           class="home-events-card-community-logo"
-          src="{{ community.logo_image_path.i64 }}"
-          title="{{ community.name }}"
-        />
+        ></commudle-banner-image>
+
         <div class="home-events-card-community-name com-line-clamp-1">{{ community.name }}</div>
       </div>
       <div *ngIf="event.start_time && moment(event.start_time) > moment()" class="home-events-card-register">
