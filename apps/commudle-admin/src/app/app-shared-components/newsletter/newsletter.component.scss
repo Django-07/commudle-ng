@@ -3,7 +3,7 @@
 }
 
 .newsletters > table {
-  @apply com-border-collapse com-w-full;
+  @apply com-border-collapse com-w-full com-min-w-[640px];
   tr {
     td {
       @apply com-px-4;
@@ -60,5 +60,8 @@ nb-card {
   }
 }
 .newsletters {
+  @apply com-overflow-x-auto com-w-full md:com-overflow-x-visible;
+}
+.main {
   @apply com-overflow-x-auto com-w-full;
 }
