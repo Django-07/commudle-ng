@@ -87,6 +87,7 @@ export class BlogsListComponent implements OnInit, OnDestroy {
     this.cmsService
       .getDataByTypeFieldOrderCount('blog', fields, order, this.finalCount, this.initialCount)
       .subscribe((value: IBlog[]) => {
+        this.blogs = value.sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
         this.blogs = [];
         this.blogs = value;
         this.setSchema();
@@ -102,7 +103,7 @@ export class BlogsListComponent implements OnInit, OnDestroy {
       .getDataByTypeWithFilter('blog', 'tags[].value', tag, this.finalCount, this.initialCount)
       .subscribe((data) => {
         if (data) {
-          this.blogs = data;
+          this.blogs = data.sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
           this.setSchema();
           this.isLoading = false;
         }
