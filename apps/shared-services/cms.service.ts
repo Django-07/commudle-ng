@@ -37,12 +37,16 @@ export class CmsService {
     keyword: string,
     finalCount: number,
     initialCount: number = 0,
+    fields: string = '',
+    order: string = '',
   ) {
-    return from(
-      this.client.fetch(`*[_type == "${type}" && $keyword in ${filterType}] [${initialCount}...${finalCount}]`, {
-        keyword,
-      }),
-    );
+    const projection = fields ? `{${fields}}` : '';
+
+    const orderQuery = order ? ` | order(${order})` : '';
+
+    const query = `*[_type == "${type}" && $keyword in ${filterType}]${orderQuery} [${initialCount}...${finalCount}] ${projection}`;
+
+    return from(this.client.fetch(query, { keyword }));
   }
 
   getDataByTypeWithFilterOrder(
