@@ -84,11 +84,13 @@ export class BlogsListComponent implements OnInit, OnDestroy {
   getBlogs() {
     const fields = '_id,slug,title,publishedAt,meta_description,headerImage, username, tags';
     const order = 'publishedAt desc';
-    this.cmsService.getDataByTypeFieldOrder('blog', fields, order).subscribe((value: IBlog[]) => {
-      this.blogs = value;
-      this.setSchema();
-      this.isLoading = false;
-    });
+    this.cmsService
+      .getDataByTypeFieldOrderCount('blog', fields, order, this.finalCount, this.initialCount)
+      .subscribe((value: IBlog[]) => {
+        this.blogs = value;
+        this.setSchema();
+        this.isLoading = false;
+      });
   }
 
   getTagFilterBlogs(tag) {

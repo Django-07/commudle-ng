@@ -40,13 +40,13 @@ export class CmsService {
     fields: string = '',
     order: string = '',
   ) {
-    const projection = fields ? `{${fields}}` : '';
-
-    const orderQuery = order ? ` | order(${order})` : '';
-
-    const query = `*[_type == "${type}" && $keyword in ${filterType}]${orderQuery} [${initialCount}...${finalCount}] ${projection}`;
-
-    return from(this.client.fetch(query, { keyword }));
+    return from(
+      this.client.fetch(
+        `*[_type == "${type}" && $keyword in ${filterType}] 
+       | order(${order}) {${fields}} [${initialCount}...${finalCount}]`,
+        { keyword },
+      ),
+    );
   }
 
   getDataByTypeWithFilterOrder(
