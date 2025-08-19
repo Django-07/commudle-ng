@@ -87,6 +87,7 @@ export class BlogsListComponent implements OnInit, OnDestroy {
     this.cmsService
       .getDataByTypeFieldOrderCount('blog', fields, order, this.finalCount, this.initialCount)
       .subscribe((value: IBlog[]) => {
+        this.blogs = [];
         this.blogs = value;
         this.setSchema();
         this.isLoading = false;
@@ -97,10 +98,8 @@ export class BlogsListComponent implements OnInit, OnDestroy {
     this.cmsService.getCountOfTypeWithFilter('blog', 'tags[].value', tag).subscribe((total) => {
       this.total = total;
     });
-    const fields = '_id,slug,title,publishedAt,meta_description,headerImage, username, tags';
-    const order = 'publishedAt desc';
     this.cmsService
-      .getDataByTypeWithFilter('blog', 'tags[].value', tag, this.finalCount, this.initialCount, fields, order)
+      .getDataByTypeWithFilter('blog', 'tags[].value', tag, this.finalCount, this.initialCount)
       .subscribe((data) => {
         if (data) {
           this.blogs = data;

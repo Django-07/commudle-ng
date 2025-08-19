@@ -37,13 +37,11 @@ export class CmsService {
     keyword: string,
     finalCount: number,
     initialCount: number = 0,
-    fields: string = '',
-    order: string = '',
   ) {
     return from(
       this.client.fetch(
         `*[_type == "${type}" && $keyword in ${filterType}] 
-       | order(${order}) {${fields}} [${initialCount}...${finalCount}]`,
+       | order(publishedAt desc) [${initialCount}...${finalCount}]`,
         { keyword },
       ),
     );
